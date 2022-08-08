@@ -1,0 +1,182 @@
+
+<?php
+session_start();
+include 'dbconnect.php';
+if((isset($_REQUEST['movieid']))&&(!empty($_REQUEST['movieid'])))
+$movieid=$_REQUEST['movieid'];
+echo $_SESSION['currentuser'];
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-7" />
+<title>Ηλεκτρονική Ταινιοθήκη</title>
+<meta name="keywords" content="Ταινίες, πληροφορίες για ταινίες" />
+<meta name="description" content="Ιστοσελίδα με πληροφορίες για ταινία" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+
+
+
+</head>
+<body>
+
+<div id="ergasia_wrapper">
+
+	<div id="ergasia_header">
+    
+    	<div id="site_title"> 
+		</div>
+        
+        <div id="ergasia_menu" class="ddsmoothmenu">
+            <ul>
+              	<li><a href="index.php" class="selected">Αρχική</a></li>
+          		<li><a href="register.php">Εγγραφή</a></li>
+				<li><a href="login.php">Είσοδος</a></li>
+            </ul>
+            <br style="clear: left" />
+        </div> <!-- end of ergasia_menu -->
+        
+    </div> <!-- end of header -->
+
+    
+    <div id="ergasia_main">
+    	<div class="col_fw">
+        	<div class="col_w660 float_l">
+            	<h2>Ηλεκτρονική Ταινιοθήκη</h2>
+                <div class="cleaner h20"></div>
+                <p>Η σελίδα περιέχει μια λίστα από ταινίες για τις οποίες μπορείτε να δείτε πληροφορίες πατώντας πάνω σε έναν από τους τίτλους. Για το σχολιασμό και τη βαθμολογηση θα πρέπει να είστε εξουσιοδοτημένος χρήστης. Για εγγραφή πατήστε στην επιλογή Εγγραφή.
+				</p>
+				<h4>Ταινία</h4>
+                <div class="cleaner h20"></div>
+                <p>
+				<?php
+
+
+			  $sql = "SELECT * FROM tblmovie,tblcategory where tblcategory.categoryid=tblmovie.category and tblmovie.movieid=$movieid";
+			  $result = $conn->query($sql);
+			  if (!$result) die($conn->error);
+
+			  while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+			  echo "<h5>Κατηγορία:" .$row['categoryname'] ."</h5><br>";
+				echo "<h5>" .$row['title'] ."</h5><br>";
+				echo "<img src='./movieimages/" .$row['image'] ."' width='250'/><br>";
+				echo "<h5>Σκηνοθέτης:" .$row['director'] ."</h5><br>";
+				echo "<h5>Περίληψη:</h5> " .$row['summary'] ."<br>";
+				echo "<h5>Ημερομηνία Παραγωγής:" .$row['productiondate'] ."</h5><br>";
+				echo "<h5>Ηθοποιοί:" .$row['actors'] ."</h5><br>";
+				echo "<h5>Διάρκεια:" .$row['duration'] ."'</h5><br>";
+				$movieid=$row['movieid'];
+			  }
+			  $result->close(); /* Free buffers/memory */
+
+?>
+				</p>
+				<h4>Σχόλια</h4>
+				 <p>
+				<?php
+			  $sql = "SELECT * FROM tblcomment where tblcomment.movieid=$movieid";
+			  $result = $conn->query($sql);
+			  if (!$result) die($conn->error);
+
+			  while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+				echo $row['comment'] ."<hr>";
+			  }
+			  $result->close(); /* Free buffers/memory */
+			  
+			  $sql = "SELECT * FROM tblmark where tblmark.movieid=$movieid";
+			  $result = $conn->query($sql);
+			  if (!$result) die($conn->error);
+				$sum=0;
+			  while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+				$sum+=$row['mark'] ."<hr>";
+			  }
+			  if($result->num_rows>0){
+				$median=$sum/$result->num_rows;
+				echo "<h4>Μέση Βαθμολογία:".$median."</h4>";
+				}
+			  $result->close(); /* Free buffers/memory */			  
+			  $conn->close();   /* Close connection */
+?>
+				</p>
+<?php 
+// if current user is logged in then show mark and comment 
+if (isset($_SESSION['currentuser']))
+{
+?>
+				<h4>Προσθήκη Σχόλιου</h4>
+				                <p>
+		<FORM name="commentform"  action="addcomment.php" method="post" >
+				<input type="hidden" name="movieid" id="movieid" value="<?php echo $movieid;?>" />
+                  			<TABLE class=Data width="100%" border=0 >
+                    				<TBODY>
+                    				<TR>
+                      					<TD class=bt colSpan=2>Σχόλιο:
+								</TD>
+							</TR>
+                    				<TR>
+                      					<TD colSpan=2><textarea id="comment" name="comment"></textarea>
+								</TD>
+							</TR>
+
+                    		<TR>
+                      					<TD align="left" colSpan=2><INPUT type="submit" height=32 width=103 value="Προσθήκη Σχολίου">
+								</TD>
+							</TR>
+							</TBODY>
+						</TABLE>
+						</FORM>
+		<FORM name="markform" onsubmit="return checklog();" action="addmark.php" method="post" >
+				<input type="hidden" name="movieid" id="movieid" value="<?php echo $movieid;?>" />
+                  			<TABLE class=Data width="100%" border=0 >
+                    				<TBODY>
+                    				<TR>
+                      					<TD class=bt colSpan=2>Βαθμός:
+								</TD>
+							</TR>
+                    				<TR>
+                      					<TD colSpan=2>
+										<select name="mark" id="mark">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>										
+										</select>
+								</TD>
+							</TR>
+
+                    		<TR>
+                      					<TD align="left" colSpan=2><INPUT type="submit" height=32 width=103 value="Προσθήκη Βαθμού">
+								</TD>
+							</TR>
+							</TBODY>
+						</TABLE>
+						</FORM>
+				</p>
+				<?php }?>
+                <div class="cleaner h20"></div>
+
+            </div>
+
+            <div class="cleaner"></div>
+		</div>
+
+        <div class="cleaner"></div>
+        </div>
+    </div>
+    
+    <div class="cleaner"></div>
+
+<div id="ergasia_footer_wrapper">
+    <div id="ergasia_footer">
+        Copyright © 2016  <a href="#" target="_parent">Ηλεκτρονική Ταινιοθήκη</a> | 
+        Designed by <a href="#" target="_parent">Ηλεκτρονική Ταινιοθήκη</a>
+        <div class="cleaner"></div>
+    </div>
+</div> 
+  
+</body>
+</html>

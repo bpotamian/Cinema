@@ -1,0 +1,146 @@
+body {
+	margin: 0;
+	padding: 0;
+	color: #656565;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 13px;
+	line-height: 1.5em; 
+	background-color: #ededed;
+	background-repeat: repeat-x;
+	background-position: top;
+	background-image: url(images/ergasia_bg.jpg)
+}
+
+a, a:link, a:visited { color: #000; font-weight: normal; text-decoration: none }
+a:hover { color: #03b; text-decoration: none; }
+
+p { margin: 0 0 10px 0; padding: 0; }
+img { border: none; }
+
+
+h1, h2, h3, h4, h5, h6 { color: #333; font-weight: normal; 	font-family: Georgia, "Times New Roman", Times, serif; }
+h1 { font-size: 48px; margin: 0 0 30px; padding: 5px 0 }
+h2 { font-size: 38px; margin: 0 0 25px; padding: 5px 0; }
+h3 { font-size: 30px; margin: 0 0 20px; padding: 0; }
+h4 { font-size: 24px; margin: 0 0 15px; padding: 0; }
+h5 { font-size: 20px; margin: 0 0 10px; padding: 0;  }
+h6 { font-size: 14px; margin: 0 0 5px; padding: 0; }
+
+.cleaner { clear: both }
+.h10 { height: 10px }
+.h20 { height: 20px }
+.h30 { height: 30px }
+.h40 { height: 40px }
+.h50 { height: 50px }
+.h60 { height: 60px }
+
+.float_l { float: left }
+.float_r { float: right }
+
+
+
+#ergasia_wrapper {
+	margin: 0 auto;
+	padding: 0 10px;
+	width: 960px;
+}
+
+#ergasia_header {
+	width: 100%;
+	height: 152px;
+	background: url(images/header.jpg) no-repeat top left
+}
+
+#ergasia_menu { float: right; }
+
+#ergasia_main {
+	clear: both;
+	width: 960px;
+	padding: 60px 0 20px;
+}
+
+#ergasia_content {
+	float: left;
+	width: 630px;
+}
+
+#ergasia_sidebar {
+	float: right;
+	width: 300px;
+}
+
+.col_w660 { width: 660px; text-align: justify } 
+.col_w300 { width: 300px }
+
+
+#ergasia_footer_wrapper {
+	clear: both;
+	width: 100%;
+	background: #000000 url(images/ergasia_footer.png) top repeat-x
+
+}
+
+#ergasia_footer {
+	clear: both;
+	width: 960px;
+	padding: 30px 10px 15px;	
+	margin: 0 auto;
+	color: #666;
+	text-align: center;
+}
+.ddsmoothmenu{
+
+}
+
+.ddsmoothmenu ul{
+	z-index:100;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+/*Top level list items*/
+.ddsmoothmenu ul li{
+	position: relative;
+	display: inline;
+	float: left;
+}
+
+/*Top level menu link items style*/
+.ddsmoothmenu ul li a {
+	display: block;
+	position: relative;
+	width: 90px;
+	padding: 65px 0 10px;
+	margin: 0 1px 0 0;
+	font-size: 14px;
+	color: #777;	
+	text-align: center;
+	text-decoration: none;
+	font-weight: 400;
+	outline: none;
+	border: none;
+}
+
+
+.ddsmoothmenu ul li a.selected, .ddsmoothmenu ul li a:hover { /*CSS class that's dynamically added to the currently active menu items' LI A element*/
+	color: #fff;
+	background: #3277FF;
+	border-bottom: 5px solid #96C7FF;
+}
+	
+
+
+/* menu */
+/* popup box */
+.box{
+    display: none;
+    width: 100%;
+}
+
+a:hover + .box,.box:hover{
+    display: block;
+    position: relative;
+    z-index: 100;
+}
+/* popup box */
